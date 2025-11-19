@@ -8,10 +8,10 @@ import { highlightCards } from "@/lib/highlights";
 export default function Home() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-50 via-white to-slate-100 font-sans text-slate-900">
-      <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-6 pb-16 pt-8 md:px-10">
+      <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 pb-12 pt-6 sm:px-6 sm:pb-16 sm:pt-8 md:px-10">
         <Navbar />
 
-        <main className="mt-10 flex flex-1 flex-col gap-10">
+        <main className="mt-6 flex flex-1 flex-col gap-8 sm:mt-10 sm:gap-10">
           <Hero
             badge="Guides & Ressources"
             title={
@@ -34,7 +34,7 @@ export default function Home() {
             }}
           />
 
-          <section className="grid gap-6 md:grid-cols-3">
+          <section className="grid gap-4 sm:gap-6 sm:grid-cols-2 md:grid-cols-3">
             {highlightCards.map((card) => (
               <HighlightCard key={card.title} {...card} />
             ))}

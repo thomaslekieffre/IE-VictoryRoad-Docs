@@ -5,6 +5,7 @@ import {
   Info,
   Sparkles,
   Swords,
+  Users2,
 } from "lucide-react";
 
 export type DropdownItem = {
@@ -21,6 +22,7 @@ export type NavItem = {
 
 export const navItems: NavItem[] = [
   { label: "Accueil", icon: HomeIcon, href: "#" },
+  { label: "Héros S1", icon: Users2, href: "/heros-s1" },
   {
     label: "Passif",
     icon: Swords,

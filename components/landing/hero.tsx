@@ -45,15 +45,15 @@ const Hero = ({
       <div className="absolute inset-0 bg-gradient-to-b from-slate-900/20 via-slate-900/40 to-slate-950/80" />
     </div>
 
-    <div className="relative z-10 flex flex-col gap-6 px-8 py-16 text-white md:px-16 md:py-20">
-      <span className="w-fit rounded-full border border-white/30 px-4 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-white/80">
+    <div className="relative z-10 flex flex-col gap-4 px-6 py-12 text-white sm:gap-6 sm:px-8 sm:py-16 md:px-16 md:py-20">
+      <span className="w-fit rounded-full border border-white/30 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/80 sm:px-4 sm:text-xs">
         {badge}
       </span>
-      <h1 className="text-4xl font-black leading-tight md:text-5xl">{title}</h1>
-      <p className="max-w-3xl text-base leading-relaxed text-white/80 md:text-lg">
+      <h1 className="text-3xl font-black leading-tight sm:text-4xl md:text-5xl">{title}</h1>
+      <p className="max-w-3xl text-sm leading-relaxed text-white/80 sm:text-base md:text-lg">
         {subtitle}
       </p>
-      <div className="flex flex-wrap gap-3 text-sm font-semibold">
+      <div className="flex flex-col gap-3 text-sm font-semibold sm:flex-row sm:flex-wrap">
         <HeroButton {...primaryCta} />
         <HeroButton {...secondaryCta} variant="secondary" />
       </div>
