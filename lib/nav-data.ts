@@ -29,7 +29,11 @@ export const navItems: NavItem[] = [
     label: "Astuce",
     icon: Sparkles,
     dropdown: [
-      { label: "Fèves", description: "Optimiser les récoltes quotidiennes" },
+      {
+        label: "Fèves",
+        description: "Optimiser les récoltes quotidiennes",
+        href: "/astuce/feves",
+      },
       { label: "Farm Token", description: "Routes rapides pour max tokens" },
       {
         label: "Héros S1",
@@ -43,7 +47,11 @@ export const navItems: NavItem[] = [
     icon: BookOpenCheck,
     dropdown: [
       { label: "Tirs", description: "Puissance, éléments et synergies" },
-      { label: "Défense", description: "Contres, blocs, interceptions" },
+      {
+        label: "Défense",
+        description: "Contres, blocs, interceptions",
+        href: "/doc-technique/defensive",
+      },
       {
         label: "Gardien",
         description: "Posture, murs, timings",

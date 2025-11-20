@@ -1,8 +1,6 @@
 import HeroDirectory from "@/components/heroes/hero-directory";
 import { fetchHeroesS1Data } from "@/lib/heroes-s1";
 
-export const revalidate = 60 * 60; // 1h
-
 export const metadata = {
   title: "Héros S1 — Victory Road FR",
   description:
