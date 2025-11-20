@@ -180,7 +180,7 @@ export default function HeroDirectory({ heroes }: HeroDirectoryProps) {
                 Fermer
               </button>
             </div>
-            <div className="max-h-[75vh] overflow-y-auto pr-1">
+            <div className="max-h-[75vh] overflow-y-auto">
               <HeroCard hero={selectedHero} isFocused />
             </div>
           </div>
