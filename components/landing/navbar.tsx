@@ -1,8 +1,8 @@
 
 "use client";
 
-import type { ComponentPropsWithoutRef } from "react";
-import { useEffect, useState } from "react";
+import type { ComponentPropsWithoutRef, Dispatch, SetStateAction } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, Search, X } from "lucide-react";
 
 import { navItems } from "@/lib/nav-data";
@@ -13,6 +13,7 @@ type NavbarProps = ComponentPropsWithoutRef<"header">;
 
 const Navbar = ({ className, ...props }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isMenuOpen) {
@@ -50,7 +51,12 @@ const Navbar = ({ className, ...props }: NavbarProps) => {
 
         <nav className="hidden items-center gap-1 md:flex">
           {navItems.map((item) => (
-            <NavLink key={item.label} item={item} />
+            <NavLink
+              key={item.label}
+              item={item}
+              activeDropdown={activeDropdown}
+              setActiveDropdown={setActiveDropdown}
+            />
           ))}
 
           <button
@@ -117,8 +123,14 @@ const Navbar = ({ className, ...props }: NavbarProps) => {
                       <ul className="ml-6 mt-3 space-y-2 border-l border-slate-100 pl-4 text-sm text-slate-500">
                         {item.dropdown.map((entry) => (
                           <li key={`${item.label}-${entry.label}`}>
-                            <p className="font-semibold text-slate-700">{entry.label}</p>
-                            <p className="text-[12px] text-slate-500">{entry.description}</p>
+                            <a
+                              href={entry.href ?? "#"}
+                              className="block rounded-xl px-3 py-2 transition hover:bg-slate-50"
+                              onClick={() => setIsMenuOpen(false)}
+                            >
+                              <p className="font-semibold text-slate-700">{entry.label}</p>
+                              <p className="text-[12px] text-slate-500">{entry.description}</p>
+                            </a>
                           </li>
                         ))}
                       </ul>
@@ -136,37 +148,83 @@ const Navbar = ({ className, ...props }: NavbarProps) => {
 
 export default Navbar;
 
-function NavLink({ item }: { item: NavItem }) {
+type NavLinkProps = {
+  item: NavItem;
+  activeDropdown: string | null;
+  setActiveDropdown: Dispatch<SetStateAction<string | null>>;
+};
+
+function NavLink({ item, activeDropdown, setActiveDropdown }: NavLinkProps) {
   const Icon = item.icon;
+  const hasDropdown = Boolean(item.dropdown);
+  const isOpen = hasDropdown && activeDropdown === item.label;
+  const closeTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  const handleEnter = () => {
+    if (closeTimeout.current) {
+      clearTimeout(closeTimeout.current);
+      closeTimeout.current = null;
+    }
+    if (hasDropdown) {
+      setActiveDropdown(item.label);
+    }
+  };
+
+  const handleLeave = () => {
+    if (!hasDropdown) return;
+    closeTimeout.current = setTimeout(() => {
+      setActiveDropdown((current) => (current === item.label ? null : current));
+    }, 120);
+  };
 
   return (
-    <div className="group relative">
+    <div
+      className="relative"
+      onMouseEnter={handleEnter}
+      onMouseLeave={handleLeave}
+      onFocusCapture={handleEnter}
+      onBlurCapture={handleLeave}
+    >
       <a
         href={item.href ?? "#"}
         className="flex items-center gap-2 rounded-full px-3 py-2 text-sm font-semibold text-slate-800 transition hover:bg-white/60 hover:text-slate-950"
+        aria-haspopup={hasDropdown ? "true" : undefined}
+        aria-expanded={hasDropdown ? isOpen : undefined}
       >
         <Icon className="h-4 w-4 text-slate-500" strokeWidth={2.2} />
         {item.label}
         {item.dropdown && (
-          <ChevronDown className="h-3.5 w-3.5 text-slate-400 transition group-hover:rotate-180" />
+          <ChevronDown
+            className={cn(
+              "h-3.5 w-3.5 text-slate-400 transition",
+              isOpen && "rotate-180 text-slate-600",
+            )}
+          />
         )}
       </a>
 
       {item.dropdown && (
-        <div className="invisible absolute right-0 top-full z-50 mt-3 w-64 max-w-[calc(100vw-2rem)] translate-y-2 rounded-2xl border border-slate-100 bg-white p-3 text-sm shadow-2xl opacity-0 transition group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+        <div
+          className={cn(
+            "pointer-events-none invisible absolute right-0 top-full z-50 mt-3 w-64 max-w-[calc(100vw-2rem)] translate-y-2 rounded-2xl border border-slate-100 bg-white p-3 text-sm shadow-2xl opacity-0 transition",
+            isOpen && "pointer-events-auto visible translate-y-0 opacity-100",
+          )}
+        >
           <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-slate-400">
             {item.label}
           </p>
           <ul className="space-y-2">
             {item.dropdown.map((entry) => (
-              <li
-                key={entry.label}
-                className="rounded-xl px-3 py-2 transition hover:bg-slate-50"
-              >
-                <p className="text-xs font-semibold text-slate-800">
-                  {entry.label}
-                </p>
-                <p className="text-[11px] text-slate-500">{entry.description}</p>
+              <li key={entry.label}>
+                <a
+                  href={entry.href ?? "#"}
+                  className="block rounded-xl px-3 py-2 transition hover:bg-slate-50"
+                >
+                  <p className="text-xs font-semibold text-slate-800">
+                    {entry.label}
+                  </p>
+                  <p className="text-[11px] text-slate-500">{entry.description}</p>
+                </a>
               </li>
             ))}
           </ul>

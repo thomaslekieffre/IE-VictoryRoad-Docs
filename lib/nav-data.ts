@@ -1,16 +1,10 @@
 import type { ComponentType, SVGProps } from "react";
-import {
-  BookOpenCheck,
-  HomeIcon,
-  Info,
-  Sparkles,
-  Swords,
-  Users2,
-} from "lucide-react";
+import { BookOpenCheck, HomeIcon, Info, Sparkles, Swords } from "lucide-react";
 
 export type DropdownItem = {
   label: string;
   description: string;
+  href?: string;
 };
 
 export type NavItem = {
@@ -21,8 +15,7 @@ export type NavItem = {
 };
 
 export const navItems: NavItem[] = [
-  { label: "Accueil", icon: HomeIcon, href: "#" },
-  { label: "Héros S1", icon: Users2, href: "/heros-s1" },
+  { label: "Accueil", icon: HomeIcon, href: "/" },
   {
     label: "Passif",
     icon: Swords,
@@ -38,7 +31,11 @@ export const navItems: NavItem[] = [
     dropdown: [
       { label: "Fèves", description: "Optimiser les récoltes quotidiennes" },
       { label: "Farm Token", description: "Routes rapides pour max tokens" },
-      { label: "Héros S1", description: "Débloquer les vétérans de Raimon" },
+      {
+        label: "Héros S1",
+        description: "Débloquer les vétérans de Raimon",
+        href: "/heros-s1",
+      },
     ],
   },
   {
@@ -47,7 +44,11 @@ export const navItems: NavItem[] = [
     dropdown: [
       { label: "Tirs", description: "Puissance, éléments et synergies" },
       { label: "Défense", description: "Contres, blocs, interceptions" },
-      { label: "Gardien", description: "Posture, murs, timings" },
+      {
+        label: "Gardien",
+        description: "Posture, murs, timings",
+        href: "/doc-technique/gardien",
+      },
     ],
   },
   { label: "Crédits", icon: Info, href: "#credits" },

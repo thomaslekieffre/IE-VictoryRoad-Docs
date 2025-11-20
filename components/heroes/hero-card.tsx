@@ -8,10 +8,7 @@ type HeroCardProps = {
   isFocused?: boolean;
 };
 
-const colorTokens: Record<
-  string,
-  { badge: string; dot: string; glow: string }
-> = {
+const colorTokens: Record<string, { badge: string; dot: string; glow: string }> = {
   rose: {
     badge: "bg-pink-50 text-pink-600 border-pink-100",
     dot: "bg-pink-400",
