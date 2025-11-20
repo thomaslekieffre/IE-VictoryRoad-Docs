@@ -85,7 +85,8 @@ export default function KeeperTechniqueCard({
   return (
     <article
       className={cn(
-        "group relative flex flex-col gap-3 rounded-3xl border border-slate-100 bg-white/90 p-4 shadow-lg shadow-slate-200/60 transition hover:-translate-y-0.5 hover:shadow-2xl sm:p-5",
+        "group relative flex flex-col gap-3 rounded-3xl border border-slate-100 bg-white/90 p-4 shadow-lg shadow-slate-200/60 transition sm:p-5",
+        !isFocused && "hover:-translate-y-0.5 hover:shadow-2xl",
         palette.ring,
         isFocused && "ring-2 ring-slate-400 shadow-2xl",
         interactive &&
@@ -96,14 +97,16 @@ export default function KeeperTechniqueCard({
       onClick={onSelect}
       onKeyDown={handleKey}
     >
-      <div
-        aria-hidden="true"
-        className={cn(
-          "pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100",
-          "rounded-3xl bg-gradient-to-br",
-          palette.gradient,
-        )}
-      />
+      {!isFocused && (
+        <div
+          aria-hidden="true"
+          className={cn(
+            "pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100",
+            "rounded-3xl bg-gradient-to-br",
+            palette.gradient,
+          )}
+        />
+      )}
 
       <header className="relative z-10 flex flex-wrap items-start justify-between gap-3">
         <div>
