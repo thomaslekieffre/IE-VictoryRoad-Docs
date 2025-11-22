@@ -1,5 +1,6 @@
 import type { ComponentPropsWithoutRef } from "react";
-import { Github, Mail, Twitter } from "lucide-react";
+import { Github, Twitter } from "lucide-react";
+import { FaDiscord } from "react-icons/fa";
 import { cn } from "@/lib/utils";
 
 const footerLinks = [
@@ -8,23 +9,23 @@ const footerLinks = [
     links: [
       { label: "Héros S1", href: "/heros-s1" },
       { label: "Passifs (soon)", href: "#" },
-      { label: "Docs techniques", href: "#" },
+      { label: "Docs techniques", href: "/doc-technique/tirs" },
     ],
   },
   {
     title: "Communauté",
     links: [
-      { label: "Discord FR", href: "#" },
-      { label: "Tournois", href: "#" },
-      { label: "Soumettre une fiche", href: "#" },
+      { label: "Discord FR", href: "https://discord.gg/ievrfr"},
+      { label: "Tournois", href: "https://discord.gg/t2Q3wJTXY8" },
+      { label: "Soumettre une fiche (Soon)", href: "#" },
     ],
   },
 ];
 
 const socialLinks = [
-  { label: "Twitter", href: "https://twitter.com", icon: Twitter },
-  { label: "GitHub", href: "https://github.com", icon: Github },
-  { label: "Mail", href: "mailto:victoryroad@example.com", icon: Mail },
+  { label: "Twitter", href: "https://x.com/ievrfr", icon: Twitter },
+  { label: "GitHub", href: "https://github.com/thomaslekieffre", icon: Github },
+  { label: "Discord", href: "https://discord.gg/ievrfr", icon: FaDiscord },
 ];
 
 type FooterProps = ComponentPropsWithoutRef<"footer">;
