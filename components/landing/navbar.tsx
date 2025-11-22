@@ -1,9 +1,9 @@
-
 "use client";
 
 import type { ComponentPropsWithoutRef, Dispatch, SetStateAction } from "react";
 import { useEffect, useRef, useState } from "react";
 import { ChevronDown, Menu, Search, X } from "lucide-react";
+import Link from "next/link";
 
 import { navItems } from "@/lib/nav-data";
 import type { NavItem } from "@/lib/nav-data";
@@ -22,9 +22,7 @@ const Navbar = ({ className, ...props }: NavbarProps) => {
     }
 
     const handleKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setIsMenuOpen(false);
-      }
+      if (event.key === "Escape") setIsMenuOpen(false);
     };
 
     document.body.classList.add("overflow-hidden");
@@ -45,9 +43,12 @@ const Navbar = ({ className, ...props }: NavbarProps) => {
         )}
         {...props}
       >
-        <span className="text-base font-black uppercase tracking-[0.25em] text-slate-900 sm:text-lg">
+        <Link
+          href="/"
+          className="text-base font-black uppercase tracking-[0.25em] text-slate-900 sm:text-lg"
+        >
           Victory Road FR
-        </span>
+        </Link>
 
         <nav className="hidden items-center gap-1 md:flex">
           {navItems.map((item) => (
@@ -129,7 +130,9 @@ const Navbar = ({ className, ...props }: NavbarProps) => {
                               onClick={() => setIsMenuOpen(false)}
                             >
                               <p className="font-semibold text-slate-700">{entry.label}</p>
-                              <p className="text-[12px] text-slate-500">{entry.description}</p>
+                              <p className="text-[12px] text-slate-500">
+                                {entry.description}
+                              </p>
                             </a>
                           </li>
                         ))}
@@ -165,15 +168,15 @@ function NavLink({ item, activeDropdown, setActiveDropdown }: NavLinkProps) {
       clearTimeout(closeTimeout.current);
       closeTimeout.current = null;
     }
-    if (hasDropdown) {
-      setActiveDropdown(item.label);
-    }
+    if (hasDropdown) setActiveDropdown(item.label);
   };
 
   const handleLeave = () => {
     if (!hasDropdown) return;
     closeTimeout.current = setTimeout(() => {
-      setActiveDropdown((current) => (current === item.label ? null : current));
+      setActiveDropdown((current) =>
+        current === item.label ? null : current,
+      );
     }, 120);
   };
 
@@ -223,7 +226,9 @@ function NavLink({ item, activeDropdown, setActiveDropdown }: NavLinkProps) {
                   <p className="text-xs font-semibold text-slate-800">
                     {entry.label}
                   </p>
-                  <p className="text-[11px] text-slate-500">{entry.description}</p>
+                  <p className="text-[11px] text-slate-500">
+                    {entry.description}
+                  </p>
                 </a>
               </li>
             ))}
@@ -233,4 +238,3 @@ function NavLink({ item, activeDropdown, setActiveDropdown }: NavLinkProps) {
     </div>
   );
 }
-
