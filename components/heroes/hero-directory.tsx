@@ -92,8 +92,6 @@ export default function HeroDirectory({ heroes }: HeroDirectoryProps) {
       >
         <div className="grid gap-3 rounded-3xl border border-white/60 bg-white/80 p-4 shadow-xl shadow-slate-200/50 sm:grid-cols-3 sm:gap-4 sm:p-6">
           <Stat label="Héros recensés" value={heroes.length.toString()} />
-          <Stat label="Styles uniques" value={styles.length.toString()} />
-          <Stat label="Passifs analysés" value={totalPassives.toString()} />
         </div>
 
         <div className="grid gap-4 rounded-3xl border border-slate-100 bg-white/90 p-4 shadow-lg shadow-slate-200/50 sm:p-5 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr]">
