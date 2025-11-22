@@ -46,6 +46,11 @@ export const navItems: NavItem[] = [
     label: "Doc Technique",
     icon: BookOpenCheck,
     dropdown: [
+      {
+        label: "Tirs",
+        description: "Puissance, éléments et coûts",
+        href: "/doc-technique/tirs",
+      },
       { 
         label: "Attaque",
         description: "Puissance, éléments et synergies",
