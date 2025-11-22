@@ -46,7 +46,11 @@ export const navItems: NavItem[] = [
     label: "Doc Technique",
     icon: BookOpenCheck,
     dropdown: [
-      { label: "Tirs", description: "Puissance, éléments et synergies" },
+      { 
+        label: "Attaque",
+        description: "Puissance, éléments et synergies",
+        href: "/doc-technique/offensive",
+      },
       {
         label: "Défense",
         description: "Contres, blocs, interceptions",
