@@ -9,9 +9,18 @@ type Props = {
   techniques: TirsTechnique[];
 };
 
+function normalizeSearch(value: string) {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
+
 export default function TirsTechniqueDirectory({ techniques }: Props) {
   const [query, setQuery] = useState("");
   const [elementFilter, setElementFilter] = useState("all");
+  const [shotTypeFilter, setShotTypeFilter] = useState("all");
   const [minOff, setMinOff] = useState(() => {
     const values = techniques.map((tech) => tech.off).filter(Boolean);
     return Math.min(...values, 0);
@@ -30,28 +39,52 @@ export default function TirsTechniqueDirectory({ techniques }: Props) {
     ).sort();
   }, [techniques]);
 
+  const shotTypes = useMemo(() => {
+    return Array.from(
+      new Set(
+        techniques
+          .map((t) => t.shotType)
+          .filter((t) => t && t !== "—")
+          .map((t) => t.trim()),
+      ),
+    ).sort();
+  }, [techniques]);
+
   const maxOff = useMemo(() => {
     return techniques.reduce((max, tech) => Math.max(max, tech.off), 0);
   }, [techniques]);
 
   const filtered = useMemo(() => {
-    const term = query.trim().toLowerCase();
+    const term = normalizeSearch(query);
 
     return techniques
       .filter((tech) => {
+        const haystack = [
+          tech.nameFr,
+          tech.nameEn,
+          tech.nameJp,
+          tech.element,
+          tech.location,
+          tech.shotType,
+        ]
+          .filter(Boolean)
+          .join(" ");
+
         const matchesQuery =
-          !term ||
-          tech.nameFr.toLowerCase().includes(term) ||
-          tech.nameEn.toLowerCase().includes(term) ||
-          tech.location.toLowerCase().includes(term);
+          !term || normalizeSearch(haystack).includes(term);
 
         const matchesElement =
           elementFilter === "all" ||
           tech.element.toLowerCase() === elementFilter;
 
+        const normalizedShotType = normalizeSearch(tech.shotType || "");
+        const matchesShotType =
+          shotTypeFilter === "all" ||
+          normalizedShotType.startsWith(shotTypeFilter);
+
         const matchesOff = tech.off >= minOff;
 
-        return matchesQuery && matchesElement && matchesOff;
+        return matchesQuery && matchesElement && matchesShotType && matchesOff;
       })
       .sort((a, b) => {
         if (b.off === a.off) {
@@ -59,7 +92,7 @@ export default function TirsTechniqueDirectory({ techniques }: Props) {
         }
         return b.off - a.off;
       });
-  }, [techniques, query, elementFilter, minOff]);
+  }, [techniques, query, elementFilter, shotTypeFilter, minOff]);
 
   const visibleTechs = filtered.slice(0, visibleCount);
 
@@ -80,7 +113,7 @@ export default function TirsTechniqueDirectory({ techniques }: Props) {
 
   useEffect(() => {
     setVisibleCount(12);
-  }, [query, elementFilter]);
+  }, [query, elementFilter, shotTypeFilter]);
 
   useEffect(() => {
     if (!selectedTechnique) return;
@@ -117,7 +150,7 @@ export default function TirsTechniqueDirectory({ techniques }: Props) {
             Recherche
             <input
               type="text"
-              placeholder="Nom, élément, boutique..."
+              placeholder="Nom, élément, tir long/contre, boutique..."
               value={query}
               onChange={(event) => setQuery(event.target.value)}
               className="h-11 rounded-2xl border border-slate-200 px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-slate-400"
@@ -129,6 +162,13 @@ export default function TirsTechniqueDirectory({ techniques }: Props) {
             value={elementFilter}
             onChange={setElementFilter}
             options={elements}
+          />
+
+          <FilterSelect
+            label="Type de tir"
+            value={shotTypeFilter}
+            onChange={setShotTypeFilter}
+            options={shotTypes}
           />
 
           <label className="flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-slate-400">
@@ -146,7 +186,7 @@ export default function TirsTechniqueDirectory({ techniques }: Props) {
 
         {filtered.length === 0 ? (
           <p className="rounded-3xl border border-dashed border-slate-200 bg-white/80 p-10 text-center text-sm text-slate-500">
-            Rien ne correspond à ces filtres. Essaie un autre élément ou baisse le seuil ATTAQUE.
+            Rien ne correspond à ces filtres. Essaie un autre élément, un autre type de tir ou baisse le seuil ATTAQUE.
           </p>
         ) : (
           <div className="grid gap-4 sm:grid-cols-2">
@@ -249,4 +289,3 @@ function Stat({ label, value }: { label: string; value: string }) {
     </div>
   );
 }
-
