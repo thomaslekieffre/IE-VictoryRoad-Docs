@@ -76,7 +76,7 @@ export default function FeveDirectory({ feves }: Props) {
         )}
         aria-hidden={Boolean(selectedFeve)}
       >
-        <div className="grid gap-4 rounded-3xl border border-white/60 bg-white/80 p-4 shadow-xl shadow-slate-200/50 sm:grid-cols-2 sm:gap-6 sm:p-6">
+        <div className="flex justify-center rounded-3xl border border-white/60 bg-white/80 p-4 shadow-xl shadow-slate-200/50">
           <Stat label="Fèves listées" value={feves.length.toString()} />
         </div>
 
