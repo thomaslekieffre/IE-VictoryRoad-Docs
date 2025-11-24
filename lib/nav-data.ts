@@ -34,7 +34,11 @@ export const navItems: NavItem[] = [
         description: "Optimiser les récoltes quotidiennes",
         href: "/astuce/feves",
       },
-      { label: "Farm Token", description: "Routes rapides pour max tokens" },
+      {
+        label: "Farm Token",
+        description: "Routes rapides pour max tokens",
+        href: "/astuce/farm-token",
+      },
       {
         label: "Héros S1",
         description: "Débloquer les vétérans de Raimon",
