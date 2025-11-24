@@ -53,76 +53,66 @@ export async function fetchTokens(): Promise<Token[]> {
   const json = extractJson(rawText);
   const rows = json.table?.rows ?? [];
 
-  return rows
-    .map((row, index) => {
-      // Extraire les cellules brutes pour accéder aux formules
-      const rawCells = row.c || [];
-      
-      // Debug pour la colonne D (index 3) des lignes de données (pas l'en-tête)
-      if (index > 0 && index <= 3 && rawCells[3]) {
-        console.log(`[Row ${index}, Cell 3] Raw cell:`, JSON.stringify(rawCells[3], null, 2));
-        console.log(`[Row ${index}, Cell 3] Has f (formula):`, !!rawCells[3]?.f);
-        console.log(`[Row ${index}, Cell 3] Has v (value):`, !!rawCells[3]?.v);
-        if (rawCells[3]?.f) {
-          console.log(`[Row ${index}, Cell 3] Formula content:`, rawCells[3].f);
-        }
-        if (rawCells[3]?.v) {
-          console.log(`[Row ${index}, Cell 3] Value content:`, rawCells[3].v);
-        }
+  const tokens: Token[] = [];
+
+  for (let index = 0; index < rows.length; index++) {
+    const row = rows[index];
+    // Extraire les cellules brutes pour accéder aux formules
+    const rawCells = row.c || [];
+    
+    const cells = rawCells.map((cell) => {
+      // Priorité à la formule si elle existe (pour les formules IMAGE)
+      if (cell?.f) {
+        return { value: String(cell.f).trim(), isFormula: true };
       }
-      
-      const cells = rawCells.map((cell, cellIndex) => {
-        // Priorité à la formule si elle existe (pour les formules IMAGE)
-        if (cell?.f) {
-          return { value: String(cell.f).trim(), isFormula: true };
-        }
-        if (cell?.v === undefined || cell.v === null) {
-          return { value: "", isFormula: false };
-        }
-        // Gérer les objets
-        if (typeof cell.v === "object") {
-          return { value: "", isFormula: false };
-        }
-        return { value: String(cell.v).trim(), isFormula: false };
-      });
-
-      if (!cells || !cells.length) {
-        return null;
+      if (cell?.v === undefined || cell.v === null) {
+        return { value: "", isFormula: false };
       }
-
-      // Colonnes: Token (A), Emplacement/Location (B), PNJ/NPC (C), Photos/Pictures (D) avec =IMAGE()
-      // Index 0-based: A=0, B=1, C=2, D=3
-      const name = cells[0]?.value || "";
-      const location = cells[1]?.value || "";
-      const npc = cells[2]?.value || "";
-      const imageCell = cells[3]; // Colonne D avec formule =IMAGE()
-
-      // Ignorer l'en-tête
-      if (!name || name === "Token" || name === "GUIDE TOKEN") {
-        return null;
+      // Gérer les objets
+      if (typeof cell.v === "object") {
+        return { value: "", isFormula: false };
       }
+      return { value: String(cell.v).trim(), isFormula: false };
+    });
 
-      // Extraire l'URL depuis la formule =IMAGE("URL",...)
-      let extractedImageUrl: string | undefined;
-      if (imageCell?.value && imageCell.value.trim()) {
-        // Format: =IMAGE("URL",4,300,300) ou =IMAGE(URL,...)
-        // Extraire l'URL entre guillemets ou directement après IMAGE(
-        const imageMatch = imageCell.value.match(/IMAGE\(["']?([^"',\)]+)["']?/i);
-        if (imageMatch && imageMatch[1]) {
-          extractedImageUrl = imageMatch[1].trim();
-        }
+    if (!cells || !cells.length) {
+      continue;
+    }
+
+    // Colonnes: Token (A), Emplacement/Location (B), PNJ/NPC (C), Photos/Pictures (D) avec =IMAGE()
+    // Index 0-based: A=0, B=1, C=2, D=3
+    const name = cells[0]?.value || "";
+    const location = cells[1]?.value || "";
+    const npc = cells[2]?.value || "";
+    const imageCell = cells[3]; // Colonne D avec formule =IMAGE()
+
+    // Ignorer l'en-tête
+    if (!name || name === "Token" || name === "GUIDE TOKEN") {
+      continue;
+    }
+
+    // Extraire l'URL depuis la formule =IMAGE("URL",...)
+    let extractedImageUrl: string | undefined;
+    if (imageCell?.value && imageCell.value.trim()) {
+      // Format: =IMAGE("URL",4,300,300) ou =IMAGE(URL,...)
+      // Extraire l'URL entre guillemets ou directement après IMAGE(
+      const imageMatch = imageCell.value.match(/IMAGE\(["']?([^"',\)]+)["']?/i);
+      if (imageMatch && imageMatch[1]) {
+        extractedImageUrl = imageMatch[1].trim();
       }
+    }
 
-      return {
-        id: buildId(name, index),
-        name,
-        color: getTokenColor(name),
-        location: location || "—",
-        npc: npc || "—",
-        imageUrl: extractedImageUrl,
-      } satisfies Token;
-    })
-    .filter((token): token is Token => Boolean(token));
+    tokens.push({
+      id: buildId(name, index),
+      name,
+      color: getTokenColor(name),
+      location: location || "—",
+      npc: npc || "—",
+      imageUrl: extractedImageUrl,
+    });
+  }
+
+  return tokens;
 }
 
 function extractJson(raw: string): GvizPayload {

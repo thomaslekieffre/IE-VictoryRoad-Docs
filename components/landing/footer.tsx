@@ -5,19 +5,28 @@ import { cn } from "@/lib/utils";
 
 const footerLinks = [
   {
-    title: "Guides",
+    title: "Astuces",
     links: [
+      { label: "Fèves", href: "/astuce/feves" },
+      { label: "Farm Token", href: "/astuce/farm-token" },
       { label: "Héros S1", href: "/heros-s1" },
-      { label: "Passifs (soon)", href: "#" },
-      { label: "Docs techniques", href: "/doc-technique/tirs" },
+    ],
+  },
+  {
+    title: "Docs techniques",
+    links: [
+      { label: "Tirs", href: "/doc-technique/tirs" },
+      { label: "Attaque", href: "/doc-technique/offensive" },
+      { label: "Défense", href: "/doc-technique/defensive" },
+      { label: "Gardien", href: "/doc-technique/gardien" },
     ],
   },
   {
     title: "Communauté",
     links: [
-      { label: "Discord FR", href: "https://discord.gg/ievrfr"},
+      { label: "Discord FR", href: "https://discord.gg/ievrfr" },
       { label: "Tournois", href: "https://discord.gg/t2Q3wJTXY8" },
-      { label: "Soumettre une fiche (Soon)", href: "#" },
+      { label: "Crédits", href: "/credits" },
     ],
   },
 ];

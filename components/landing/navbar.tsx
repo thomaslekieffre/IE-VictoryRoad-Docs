@@ -2,7 +2,7 @@
 
 import type { ComponentPropsWithoutRef, Dispatch, SetStateAction } from "react";
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, Menu, Search, X } from "lucide-react";
+import { ChevronDown, Menu, X } from "lucide-react";
 import Link from "next/link";
 
 import { navItems } from "@/lib/nav-data";
@@ -59,14 +59,6 @@ const Navbar = ({ className, ...props }: NavbarProps) => {
               setActiveDropdown={setActiveDropdown}
             />
           ))}
-
-          <button
-            type="button"
-            className="ml-2 flex h-10 w-10 items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 transition hover:border-slate-300 hover:text-slate-900"
-            aria-label="Recherche"
-          >
-            <Search className="h-[18px] w-[18px]" strokeWidth={2.2} />
-          </button>
         </nav>
 
         <button
@@ -105,10 +97,6 @@ const Navbar = ({ className, ...props }: NavbarProps) => {
             </div>
 
             <div className="flex flex-col gap-6 overflow-y-auto pb-6">
-              <div className="flex items-center gap-3 rounded-2xl border border-slate-100 px-3 py-2 text-sm text-slate-600">
-                <Search className="h-4 w-4 text-slate-400" />
-                Rechercher
-              </div>
               <ul className="space-y-4">
                 {navItems.map((item) => (
                   <li key={`mobile-${item.label}`}>
