@@ -7,6 +7,10 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "shared.fastly.steamstatic.com",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.discordapp.com",
+      },
     ],
   },
 };

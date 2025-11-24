@@ -72,6 +72,6 @@ export const navItems: NavItem[] = [
       },
     ],
   },
-  { label: "Crédits", icon: Info, href: "#credits" },
+  { label: "Crédits", icon: Info, href: "/credits" },
 ];
 

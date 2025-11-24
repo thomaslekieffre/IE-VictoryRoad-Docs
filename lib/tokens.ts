@@ -58,6 +58,19 @@ export async function fetchTokens(): Promise<Token[]> {
       // Extraire les cellules brutes pour accéder aux formules
       const rawCells = row.c || [];
       
+      // Debug pour la colonne D (index 3) des lignes de données (pas l'en-tête)
+      if (index > 0 && index <= 3 && rawCells[3]) {
+        console.log(`[Row ${index}, Cell 3] Raw cell:`, JSON.stringify(rawCells[3], null, 2));
+        console.log(`[Row ${index}, Cell 3] Has f (formula):`, !!rawCells[3]?.f);
+        console.log(`[Row ${index}, Cell 3] Has v (value):`, !!rawCells[3]?.v);
+        if (rawCells[3]?.f) {
+          console.log(`[Row ${index}, Cell 3] Formula content:`, rawCells[3].f);
+        }
+        if (rawCells[3]?.v) {
+          console.log(`[Row ${index}, Cell 3] Value content:`, rawCells[3].v);
+        }
+      }
+      
       const cells = rawCells.map((cell, cellIndex) => {
         // Priorité à la formule si elle existe (pour les formules IMAGE)
         if (cell?.f) {
