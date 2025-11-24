@@ -65,7 +65,7 @@ export default function HeroCard({
     >
       <div
         className={cn(
-          "pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100",
+          "pointer-events-none absolute inset-0 opacity-30 transition duration-300 group-hover:opacity-50",
           `bg-gradient-to-br ${palette.glow}`,
         )}
       />

@@ -103,7 +103,7 @@ export default function DefensiveTechniqueCard({
         <div
           aria-hidden="true"
           className={cn(
-            "pointer-events-none absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100",
+            "pointer-events-none absolute inset-0 opacity-30 transition duration-300 group-hover:opacity-50",
             "rounded-3xl bg-gradient-to-br",
             palette.gradient,
           )}
