@@ -181,6 +181,9 @@ export default function TokenDirectory({ tokens }: Props) {
                       className="w-full h-auto object-contain"
                       loading="lazy"
                     />
+                    <p className="px-4 py-2 text-[10px] text-slate-500 italic text-center">
+                      Petit curseur bleu = emplacement
+                    </p>
                   </div>
                   <TokenCard token={selectedToken} isFocused />
                 </div>

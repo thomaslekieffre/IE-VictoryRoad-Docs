@@ -139,6 +139,9 @@ export default function TokenCard({
               className="w-full rounded-xl object-cover"
               loading="lazy"
             />
+            <p className="mt-2 text-[10px] text-slate-500 italic">
+              Petit curseur bleu = emplacement
+            </p>
           </div>
         )}
       </div>

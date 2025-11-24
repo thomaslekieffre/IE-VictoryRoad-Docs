@@ -55,64 +55,48 @@ export async function fetchTokens(): Promise<Token[]> {
 
   return rows
     .map((row, index) => {
-      const cells = row.c?.map((cell) => {
+      // Extraire les cellules brutes pour accéder aux formules
+      const rawCells = row.c || [];
+      
+      const cells = rawCells.map((cell, cellIndex) => {
         // Priorité à la formule si elle existe (pour les formules IMAGE)
         if (cell?.f) {
-          return String(cell.f).trim();
+          return { value: String(cell.f).trim(), isFormula: true };
         }
         if (cell?.v === undefined || cell.v === null) {
-          return "";
+          return { value: "", isFormula: false };
         }
         // Gérer les objets
         if (typeof cell.v === "object") {
-          return "";
+          return { value: "", isFormula: false };
         }
-        return String(cell.v).trim();
+        return { value: String(cell.v).trim(), isFormula: false };
       });
 
       if (!cells || !cells.length) {
         return null;
       }
 
-      // Colonnes: Token (A), Emplacement/Location (B), PNJ/NPC (C), Photos/Pictures (D)
+      // Colonnes: Token (A), Emplacement/Location (B), PNJ/NPC (C), Photos/Pictures (D) avec =IMAGE()
       // Index 0-based: A=0, B=1, C=2, D=3
-      const name = cells[0] || "";
-      const location = cells[1] || "";
-      const npc = cells[2] || "";
-      const imageUrl = cells[3] || "";
+      const name = cells[0]?.value || "";
+      const location = cells[1]?.value || "";
+      const npc = cells[2]?.value || "";
+      const imageCell = cells[3]; // Colonne D avec formule =IMAGE()
 
       // Ignorer l'en-tête
       if (!name || name === "Token" || name === "GUIDE TOKEN") {
         return null;
       }
 
-      // Extraire l'URL de l'image depuis différents formats possibles
+      // Extraire l'URL depuis la formule =IMAGE("URL",...)
       let extractedImageUrl: string | undefined;
-      if (imageUrl && imageUrl.trim()) {
-        // Format markdown: ![](url) - le plus courant dans Google Sheets
-        const markdownMatch = imageUrl.match(/!\[.*?\]\((https?:\/\/[^\)]+)\)/);
-        if (markdownMatch && markdownMatch[1]) {
-          extractedImageUrl = markdownMatch[1];
-        } else {
-          // Format HTML: <img src="url">
-          const htmlMatch = imageUrl.match(/<img[^>]+src=["']([^"']+)["']/i);
-          if (htmlMatch && htmlMatch[1]) {
-            extractedImageUrl = htmlMatch[1];
-          } else {
-            // Format direct URL (commence par http:// ou https://)
-            const urlMatch = imageUrl.match(/(https?:\/\/[^\s\)"'\<\>]+)/);
-            if (urlMatch && urlMatch[1]) {
-              extractedImageUrl = urlMatch[1];
-            }
-          }
-        }
-      }
-      
-      // Si pas d'URL extraite, vérifier si la cellule contient une formule IMAGE
-      if (!extractedImageUrl && imageUrl && imageUrl.trim()) {
-        const imageFormulaMatch = imageUrl.match(/IMAGE\(["']?([^"']+)["']?\)/i);
-        if (imageFormulaMatch && imageFormulaMatch[1]) {
-          extractedImageUrl = imageFormulaMatch[1];
+      if (imageCell?.value && imageCell.value.trim()) {
+        // Format: =IMAGE("URL",4,300,300) ou =IMAGE(URL,...)
+        // Extraire l'URL entre guillemets ou directement après IMAGE(
+        const imageMatch = imageCell.value.match(/IMAGE\(["']?([^"',\)]+)["']?/i);
+        if (imageMatch && imageMatch[1]) {
+          extractedImageUrl = imageMatch[1].trim();
         }
       }
 
