@@ -44,7 +44,7 @@ type GvizPayload = {
 export async function fetchTokens(): Promise<Token[]> {
   const [gvizResponse, htmlImageIndex] = await Promise.all([
     fetch(GVIZ_URL, {
-      next: { revalidate: 60 * 60, tags: ["tokens"] }, // cache 1h, revalidable
+      next: { revalidate: 10 * 60, tags: ["tokens"] }, // cache 10min, revalidable
     }),
     fetchTokenImageIndex(),
   ]);
@@ -136,7 +136,7 @@ function buildId(label: string, index: number) {
 async function fetchTokenImageIndex(): Promise<(string | undefined)[]> {
   try {
     const response = await fetch(EMBED_HTML_URL, {
-      next: { revalidate: 60 * 60, tags: ["tokens"] },
+      next: { revalidate: 10 * 60, tags: ["tokens"] },
     });
 
     if (!response.ok) {

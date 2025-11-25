@@ -68,7 +68,7 @@ type GvizPayload = {
 
 export async function fetchHeroesS1Data(): Promise<HeroS1[]> {
   const response = await fetch(GVIZ_URL, {
-    next: { revalidate: 60 * 60 }, // 1h cache pour éviter le spam
+    next: { revalidate: 10 * 60 }, // 10min cache pour éviter le spam
   });
 
   if (!response.ok) {

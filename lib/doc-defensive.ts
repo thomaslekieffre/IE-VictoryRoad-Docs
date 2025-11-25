@@ -35,7 +35,7 @@ type GvizPayload = {
 
 export async function fetchDefensiveTechniques(): Promise<DefensiveTechnique[]> {
   const response = await fetch(GVIZ_URL, {
-    next: { revalidate: 60 * 60 }, // cache 1h
+    next: { revalidate: 10 * 60 }, // cache 10min
   });
 
   if (!response.ok) {
