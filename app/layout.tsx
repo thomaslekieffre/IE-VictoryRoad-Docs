@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Navbar from "@/components/landing/navbar";
 import Footer from "@/components/landing/footer";
+import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,17 +26,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
+    <html lang="fr" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} bg-gradient-to-b from-slate-50 via-white to-slate-100 text-slate-900 antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} bg-background text-foreground antialiased`}
       >
-        <div className="min-h-screen">
-          <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 pb-12 pt-6 sm:px-6 sm:pb-16 sm:pt-8 md:px-10">
-            <Navbar />
-            <main className="mt-6 flex flex-1 flex-col sm:mt-10">{children}</main>
-            <Footer className="mt-10" />
+        <ThemeProvider>
+          <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/30">
+            <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 pb-12 pt-6 sm:px-6 sm:pb-16 sm:pt-8 md:px-10">
+              <Navbar />
+              <main className="mt-6 flex flex-1 flex-col sm:mt-10">{children}</main>
+              <Footer className="mt-10" />
+            </div>
           </div>
-        </div>
+        </ThemeProvider>
       </body>
     </html>
   );

@@ -90,19 +90,19 @@ export default function HeroDirectory({ heroes }: HeroDirectoryProps) {
         )}
         aria-hidden={Boolean(selectedHero)}
       >
-        <div className="flex justify-center rounded-3xl border border-white/60 bg-white/80 p-4 shadow-xl shadow-slate-200/50">
+        <div className="flex justify-center rounded-3xl border border-border/60 bg-card/80 p-4 shadow-xl shadow-slate-200/50">
           <Stat label="Héros listés" value={heroes.length.toString()} />
         </div>
 
-        <div className="grid gap-4 rounded-3xl border border-slate-100 bg-white/90 p-4 shadow-lg shadow-slate-200/50 sm:p-5 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr]">
-          <label className="col-span-full flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-slate-400 sm:col-span-2">
+        <div className="grid gap-4 rounded-3xl border border-border bg-card/90 p-4 shadow-lg shadow-slate-200/50 sm:p-5 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr]">
+          <label className="col-span-full flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground sm:col-span-2">
             Recherche
             <input
               type="text"
               placeholder="Nom, effet, style..."
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              className="h-11 rounded-2xl border border-slate-200 px-4 text-sm font-medium text-slate-800 outline-none transition focus:border-slate-400"
+              className="h-11 rounded-2xl border border-border bg-card px-4 text-sm font-medium text-foreground outline-none transition focus:border-ring"
             />
           </label>
 
@@ -124,7 +124,7 @@ export default function HeroDirectory({ heroes }: HeroDirectoryProps) {
         </div>
 
         {filteredHeroes.length === 0 ? (
-          <p className="rounded-3xl border border-dashed border-slate-200 bg-white/80 p-10 text-center text-sm text-slate-500">
+          <p className="rounded-3xl border border-dashed border-border bg-muted/50 p-10 text-center text-sm text-muted-foreground">
             Aucun résultat avec ces filtres. Essaie un autre style ou vide la recherche.
           </p>
         ) : (
@@ -144,7 +144,7 @@ export default function HeroDirectory({ heroes }: HeroDirectoryProps) {
             <button
               type="button"
               onClick={() => setVisibleCount((count) => count + 10)}
-              className="w-full rounded-full border border-slate-200 bg-white px-5 py-2 text-sm font-semibold text-slate-700 transition hover:border-slate-300 hover:bg-slate-50 sm:w-auto"
+              className="w-full rounded-full border border-border bg-card px-5 py-2 text-sm font-semibold text-foreground transition hover:border-ring hover:bg-accent sm:w-auto"
             >
               Voir plus ({filteredHeroes.length - visibleCount} restants)
             </button>
@@ -154,7 +154,7 @@ export default function HeroDirectory({ heroes }: HeroDirectoryProps) {
 
       {selectedHero && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/70 px-4 py-6 text-left sm:py-10"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-background/80 backdrop-blur-sm px-4 py-6 text-left sm:py-10"
           role="dialog"
           aria-modal="true"
           aria-label={`Focus sur ${selectedHero.name}`}
@@ -165,15 +165,15 @@ export default function HeroDirectory({ heroes }: HeroDirectoryProps) {
             role="presentation"
             aria-label="Fermer le focus"
           />
-          <div className="relative z-10 w-full max-w-3xl space-y-4 rounded-2xl border border-white/10 bg-white/95 p-4 shadow-2xl sm:rounded-3xl sm:p-5">
+          <div className="relative z-10 w-full max-w-3xl space-y-4 rounded-2xl border border-border bg-card p-4 shadow-2xl sm:rounded-3xl sm:p-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <p className="text-xs font-semibold uppercase tracking-[0.4em] text-slate-400 sm:text-sm">
+              <p className="text-xs font-semibold uppercase tracking-[0.4em] text-muted-foreground sm:text-sm">
                 Focus héros
               </p>
               <button
                 type="button"
                 onClick={closeOverlay}
-                className="rounded-full border border-slate-200 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-slate-900 transition hover:bg-slate-100 sm:px-4 sm:text-xs"
+                className="rounded-full border border-border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.3em] text-foreground transition hover:bg-accent sm:px-4 sm:text-xs"
               >
                 Fermer
               </button>
@@ -204,7 +204,7 @@ function FilterSelect({
   return (
     <label
       className={cn(
-        "flex min-w-0 flex-col gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-slate-400 sm:min-w-[180px]",
+        "flex min-w-0 flex-col gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground sm:min-w-[180px]",
         className,
       )}
     >
@@ -212,7 +212,7 @@ function FilterSelect({
       <select
         value={value}
         onChange={(event) => onChange(event.target.value.toLowerCase())}
-        className="h-11 rounded-2xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-800 transition focus:border-slate-400"
+        className="h-11 rounded-2xl border border-border bg-card px-3 text-sm font-medium text-foreground transition focus:border-ring"
       >
         <option value="all">Tous</option>
         {options.map((option) => (
@@ -227,11 +227,11 @@ function FilterSelect({
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl border border-slate-100 bg-white/70 px-3 py-4 text-center shadow-sm sm:rounded-2xl sm:px-4 sm:py-5">
-      <p className="text-[10px] font-semibold uppercase tracking-[0.4em] text-slate-400 sm:text-xs">
+    <div className="rounded-xl border border-border bg-muted/50 px-3 py-4 text-center shadow-sm sm:rounded-2xl sm:px-4 sm:py-5">
+      <p className="text-[10px] font-semibold uppercase tracking-[0.4em] text-muted-foreground sm:text-xs">
         {label}
       </p>
-      <p className="mt-1 text-2xl font-black text-slate-900 sm:mt-2 sm:text-3xl">{value}</p>
+      <p className="mt-1 text-2xl font-black text-foreground sm:mt-2 sm:text-3xl">{value}</p>
     </div>
   );
 }

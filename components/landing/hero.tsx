@@ -30,7 +30,7 @@ const Hero = ({
 }: HeroProps) => (
   <section
     className={cn(
-      "relative overflow-hidden rounded-[32px] border border-slate-100 shadow-2xl",
+      "relative overflow-hidden rounded-[32px] border border-border shadow-2xl",
       className,
     )}
   >

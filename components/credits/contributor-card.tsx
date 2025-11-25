@@ -14,14 +14,14 @@ export default function ContributorCard({ contributor }: ContributorCardProps) {
   };
 
   const roleColors = {
-    creator: "bg-blue-50 text-blue-700 border-blue-100",
-    "co-creator": "bg-purple-50 text-purple-700 border-purple-100",
-    contributor: "bg-slate-50 text-slate-700 border-slate-200",
+    creator: "bg-blue-500/10 text-blue-700 border-blue-500/20 dark:bg-blue-500/20 dark:text-blue-400 dark:border-blue-500/30",
+    "co-creator": "bg-purple-500/10 text-purple-700 border-purple-500/20 dark:bg-purple-500/20 dark:text-purple-400 dark:border-purple-500/30",
+    contributor: "bg-muted text-muted-foreground border-border",
   };
 
   return (
-    <div className="group relative flex flex-col items-center gap-3 rounded-2xl border border-slate-200 bg-white/80 p-4 shadow-sm transition hover:shadow-md sm:p-5">
-      <div className="relative h-16 w-16 overflow-hidden rounded-full border-2 border-slate-200 sm:h-20 sm:w-20">
+    <div className="group relative flex flex-col items-center gap-3 rounded-2xl border border-border bg-card/80 p-4 shadow-sm transition hover:shadow-md sm:p-5">
+      <div className="relative h-16 w-16 overflow-hidden rounded-full border-2 border-border sm:h-20 sm:w-20">
         <Image
           src={contributor.avatarUrl}
           alt={`Avatar de ${contributor.name}`}
@@ -31,7 +31,7 @@ export default function ContributorCard({ contributor }: ContributorCardProps) {
         />
       </div>
       <div className="flex flex-col items-center gap-1 text-center">
-        <h3 className="font-bold text-slate-900">{contributor.name}</h3>
+        <h3 className="font-bold text-foreground">{contributor.name}</h3>
         <span
           className={cn(
             "rounded-full border px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide",

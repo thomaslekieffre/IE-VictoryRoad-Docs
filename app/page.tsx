@@ -30,10 +30,10 @@ export default function Home() {
 
       <section className="space-y-6">
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.4em] text-slate-400 sm:text-xs">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.4em] text-muted-foreground sm:text-xs">
             Ressources
           </p>
-          <h2 className="mt-2 text-2xl font-black text-slate-900 sm:text-3xl">
+          <h2 className="mt-2 text-2xl font-black text-foreground sm:text-3xl">
             Guides & Documentation
           </h2>
         </div>
@@ -41,29 +41,29 @@ export default function Home() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <Link
             href="/astuce/feves"
-            className="group relative flex flex-col gap-4 rounded-3xl border border-slate-100 bg-white/80 p-6 shadow-lg shadow-slate-200/60 transition hover:-translate-y-1 hover:shadow-xl sm:p-8"
+            className="group relative flex flex-col gap-4 rounded-3xl border border-border bg-card/80 p-6 shadow-lg transition hover:-translate-y-1 hover:shadow-xl sm:p-8"
           >
             <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-amber-600">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400">
                 <Sparkles className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Astuces</h3>
+              <h3 className="text-lg font-bold text-foreground">Astuces</h3>
             </div>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-muted-foreground">
               Optimise les fèves, tokens et rerolls héros avec nos scénarios testés.
             </p>
-            <div className="mt-auto flex items-center gap-2 text-sm font-semibold text-slate-700">
+            <div className="mt-auto flex items-center gap-2 text-sm font-semibold text-foreground">
               <span>Explorer</span>
               <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
             </div>
             <div className="mt-2 flex flex-wrap gap-2">
-              <span className="rounded-full bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600">
+              <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
                 Fèves
               </span>
-              <span className="rounded-full bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600">
+              <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
                 Tokens
               </span>
-              <span className="rounded-full bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600">
+              <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
                 Héros S1
               </span>
             </div>
@@ -71,32 +71,32 @@ export default function Home() {
 
           <Link
             href="/doc-technique/tirs"
-            className="group relative flex flex-col gap-4 rounded-3xl border border-slate-100 bg-white/80 p-6 shadow-lg shadow-slate-200/60 transition hover:-translate-y-1 hover:shadow-xl sm:p-8"
+            className="group relative flex flex-col gap-4 rounded-3xl border border-border bg-card/80 p-6 shadow-lg transition hover:-translate-y-1 hover:shadow-xl sm:p-8"
           >
             <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">
                 <BookOpenCheck className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Docs techniques</h3>
+              <h3 className="text-lg font-bold text-foreground">Docs techniques</h3>
             </div>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-muted-foreground">
               Fiches tir/défense/gardien avec frames clés, coûts et mappings élémentaires.
             </p>
-            <div className="mt-auto flex items-center gap-2 text-sm font-semibold text-slate-700">
+            <div className="mt-auto flex items-center gap-2 text-sm font-semibold text-foreground">
               <span>Explorer</span>
               <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
             </div>
             <div className="mt-2 flex flex-wrap gap-2">
-              <span className="rounded-full bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600">
+              <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
                 Tirs
               </span>
-              <span className="rounded-full bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600">
+              <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
                 Attaque
               </span>
-              <span className="rounded-full bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600">
+              <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
                 Défense
               </span>
-              <span className="rounded-full bg-slate-50 px-3 py-1 text-xs font-medium text-slate-600">
+              <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
                 Gardien
               </span>
             </div>
@@ -104,18 +104,18 @@ export default function Home() {
 
           <Link
             href="/"
-            className="group relative flex flex-col gap-4 rounded-3xl border border-slate-100 bg-white/80 p-6 shadow-lg shadow-slate-200/60 transition hover:-translate-y-1 hover:shadow-xl sm:p-8"
+            className="group relative flex flex-col gap-4 rounded-3xl border border-border bg-card/80 p-6 shadow-lg transition hover:-translate-y-1 hover:shadow-xl sm:p-8"
           >
             <div className="flex items-center gap-3">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-50 text-purple-600">
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-500/10 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400">
                 <Swords className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-bold text-slate-900">Passifs</h3>
+              <h3 className="text-lg font-bold text-foreground">Passifs</h3>
             </div>
-            <p className="text-sm text-slate-600">
+            <p className="text-sm text-muted-foreground">
               Chaque buff listé avec conditions, synergies élémentaires et priorités de farm.
             </p>
-            <div className="mt-auto flex items-center gap-2 text-sm font-semibold text-slate-400">
+            <div className="mt-auto flex items-center gap-2 text-sm font-semibold text-muted-foreground">
               <span>Bientôt disponible</span>
             </div>
           </Link>

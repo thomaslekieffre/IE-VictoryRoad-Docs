@@ -13,13 +13,13 @@ export default async function FarmTokenPage() {
   return (
     <div className="space-y-8 sm:space-y-10">
       <header className="space-y-3 sm:space-y-4">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.4em] text-slate-400 sm:text-xs">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.4em] text-muted-foreground sm:text-xs">
           Astuce
         </p>
-        <h1 className="text-3xl font-black leading-tight text-slate-900 sm:text-4xl md:text-5xl">
+        <h1 className="text-3xl font-black leading-tight text-foreground sm:text-4xl md:text-5xl">
           Farm Token — routes rapides
         </h1>
-        <p className="max-w-3xl text-sm text-slate-600 sm:text-base">
+        <p className="max-w-3xl text-sm text-muted-foreground sm:text-base">
           Liste consolidée des tokens avec leurs emplacements et PNJ. Filtre par
           emplacement ou recherche par nom pour trouver rapidement le token qui
           t'intéresse.

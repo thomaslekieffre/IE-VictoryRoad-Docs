@@ -18,13 +18,13 @@ export default async function CreditsPage() {
   return (
     <div className="space-y-12 sm:space-y-16">
       <header className="space-y-3 sm:space-y-4">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.4em] text-slate-400 sm:text-xs">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.4em] text-muted-foreground sm:text-xs">
           À propos
         </p>
-        <h1 className="text-3xl font-black leading-tight text-slate-900 sm:text-4xl md:text-5xl">
+        <h1 className="text-3xl font-black leading-tight text-foreground sm:text-4xl md:text-5xl">
           Crédits
         </h1>
-        <p className="max-w-3xl text-sm text-slate-600 sm:text-base">
+        <p className="max-w-3xl text-sm text-muted-foreground sm:text-base">
           Merci à tous ceux qui ont contribué à la création et à l'enrichissement
           de ce site de ressources pour Inazuma Eleven Victory Road.
         </p>
@@ -32,7 +32,7 @@ export default async function CreditsPage() {
 
       <section className="space-y-6">
         <div>
-          <h2 className="mb-4 text-xl font-bold text-slate-900 sm:text-2xl">
+          <h2 className="mb-4 text-xl font-bold text-foreground sm:text-2xl">
             Créateurs du site
           </h2>
           <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3">
@@ -44,7 +44,7 @@ export default async function CreditsPage() {
 
         {enrichedContributors.length > 0 && (
           <div className="space-y-6 pt-8">
-            <h2 className="mb-4 text-xl font-bold text-slate-900 sm:text-2xl">
+            <h2 className="mb-4 text-xl font-bold text-foreground sm:text-2xl">
               Participants aux informations générales
             </h2>
             <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
@@ -59,8 +59,8 @@ export default async function CreditsPage() {
         )}
 
         {enrichedContributors.length === 0 && (
-          <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50/50 p-8 text-center">
-            <p className="text-sm text-slate-500">
+          <div className="rounded-2xl border border-dashed border-border bg-muted/50 p-8 text-center">
+            <p className="text-sm text-muted-foreground">
               Les contributeurs seront ajoutés au fur et à mesure.
             </p>
           </div>
