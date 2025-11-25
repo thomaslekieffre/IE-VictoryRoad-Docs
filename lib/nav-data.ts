@@ -17,12 +17,39 @@ export type NavItem = {
 export const navItems: NavItem[] = [
   { label: "Accueil", icon: HomeIcon, href: "/" },
   {
-    label: "Passif",
+    label: "Joueurs",
     icon: Swords,
     dropdown: [
-      { label: "Bientôt #1", description: "Passifs listés très bientôt" },
-      { label: "Bientôt #2", description: "Reste à l’écoute" },
-      { label: "Bientôt #3", description: "Encore un peu de patience" },
+      {
+        label: "Stats Joueurs",
+        description: "Statistiques détaillées des joueurs",
+        href: "#",
+      },
+      {
+        label: "Héros S1",
+        description: "Débloquer les vétérans de Raimon",
+        href: "/heros-s1",
+      },
+      {
+        label: "Esprit guerrier",
+        description: "Les puissants esprits guerriers",
+        href: "#",
+      },
+      {
+        label: "Miximax",
+        description: "Les meilleurs miximax",
+        href: "#",
+      },
+      {
+        label: "Eveil",
+        description: "Les éveils des joueurs",
+        href: "#",
+      },
+      {
+        label: "Totem",
+        description: "Totem (soon)",
+        href: "#",
+      },
     ],
   },
   {
@@ -38,11 +65,6 @@ export const navItems: NavItem[] = [
         label: "Farm Token",
         description: "Routes rapides pour max tokens",
         href: "/astuce/farm-token",
-      },
-      {
-        label: "Héros S1",
-        description: "Débloquer les vétérans de Raimon",
-        href: "/heros-s1",
       },
     ],
   },
