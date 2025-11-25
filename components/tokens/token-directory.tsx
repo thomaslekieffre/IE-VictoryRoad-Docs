@@ -176,7 +176,7 @@ export default function TokenDirectory({ tokens }: Props) {
                 <div className="space-y-4">
                   <div className="rounded-2xl border border-slate-200 bg-white/80 overflow-hidden">
                     <img
-                      src={selectedToken.imageUrl}
+                      src={`/api/token-image?src=${encodeURIComponent(selectedToken.imageUrl)}`}
                       alt={`Emplacement pour ${selectedToken.name}`}
                       className="w-full h-auto object-contain"
                       loading="lazy"

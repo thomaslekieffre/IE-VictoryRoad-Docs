@@ -1,6 +1,7 @@
 const SHEET_ID = "187WKJIEtC3CsW5UnHLaw_lNXjlyh_Q13WgDWazDK5Sc";
 const TOKENS_GID = "297697533";
 const GVIZ_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json&gid=${TOKENS_GID}`;
+const EMBED_HTML_URL = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/edit?gid=${TOKENS_GID}&rm=embedded`;
 
 export type Token = {
   id: string;
@@ -41,19 +42,23 @@ type GvizPayload = {
 };
 
 export async function fetchTokens(): Promise<Token[]> {
-  const response = await fetch(GVIZ_URL, {
-    next: { revalidate: 60 * 60 }, // cache 1h
-  });
+  const [gvizResponse, htmlImageIndex] = await Promise.all([
+    fetch(GVIZ_URL, {
+      next: { revalidate: 60 * 60, tags: ["tokens"] }, // cache 1h, revalidable
+    }),
+    fetchTokenImageIndex(),
+  ]);
 
-  if (!response.ok) {
+  if (!gvizResponse.ok) {
     throw new Error("Impossible de récupérer les données Tokens");
   }
 
-  const rawText = await response.text();
+  const rawText = await gvizResponse.text();
   const json = extractJson(rawText);
   const rows = json.table?.rows ?? [];
 
   const tokens: Token[] = [];
+  let dataRowIndex = 0;
 
   for (let index = 0; index < rows.length; index++) {
     const row = rows[index];
@@ -84,22 +89,11 @@ export async function fetchTokens(): Promise<Token[]> {
     const name = cells[0]?.value || "";
     const location = cells[1]?.value || "";
     const npc = cells[2]?.value || "";
-    const imageCell = cells[3]; // Colonne D avec formule =IMAGE()
+    const imageUrl = extractImageUrl(rawCells[3]) ?? htmlImageIndex[dataRowIndex];
 
     // Ignorer l'en-tête
     if (!name || name === "Token" || name === "GUIDE TOKEN") {
       continue;
-    }
-
-    // Extraire l'URL depuis la formule =IMAGE("URL",...)
-    let extractedImageUrl: string | undefined;
-    if (imageCell?.value && imageCell.value.trim()) {
-      // Format: =IMAGE("URL",4,300,300) ou =IMAGE(URL,...)
-      // Extraire l'URL entre guillemets ou directement après IMAGE(
-      const imageMatch = imageCell.value.match(/IMAGE\(["']?([^"',\)]+)["']?/i);
-      if (imageMatch && imageMatch[1]) {
-        extractedImageUrl = imageMatch[1].trim();
-      }
     }
 
     tokens.push({
@@ -108,8 +102,10 @@ export async function fetchTokens(): Promise<Token[]> {
       color: getTokenColor(name),
       location: location || "—",
       npc: npc || "—",
-      imageUrl: extractedImageUrl,
+      imageUrl,
     });
+
+    dataRowIndex += 1;
   }
 
   return tokens;
@@ -135,5 +131,129 @@ function buildId(label: string, index: number) {
     .replace(/(^-|-$)/g, "");
 
   return `${slug || "token"}-${index}`;
+}
+
+async function fetchTokenImageIndex(): Promise<(string | undefined)[]> {
+  try {
+    const response = await fetch(EMBED_HTML_URL, {
+      next: { revalidate: 60 * 60, tags: ["tokens"] },
+    });
+
+    if (!response.ok) {
+      return [];
+    }
+
+    const html = await response.text();
+    return parseImageColumn(html);
+  } catch {
+    return [];
+  }
+}
+
+function parseImageColumn(html: string): (string | undefined)[] {
+  const tableMatch = html.match(/<table[^>]+class="waffle"[^>]*>([\s\S]*?)<\/table>/i);
+  if (!tableMatch) {
+    return [];
+  }
+
+  const rows = Array.from(
+    tableMatch[1].matchAll(/<tr[^>]*>([\s\S]*?)<\/tr>/gi),
+    (match) => match[1],
+  );
+
+  const images: (string | undefined)[] = [];
+
+  for (const row of rows) {
+    const cells = Array.from(
+      row.matchAll(/<td[^>]*>([\s\S]*?)<\/td>/gi),
+      (match) => match[1],
+    );
+
+    const labelCell = stripHtml(cells[0] ?? "");
+    if (!labelCell || /token/i.test(labelCell)) {
+      continue; // ignorer les en-têtes et lignes vides
+    }
+
+    const imageCell = cells[3] ?? "";
+    const imgMatch = imageCell.match(/<img[^>]+src="([^"]+)"/i);
+    if (imgMatch && imgMatch[1]) {
+      images.push(sanitizeUrl(decodeHtml(imgMatch[1])));
+    } else {
+      images.push(undefined);
+    }
+  }
+
+  return images;
+}
+
+function extractImageUrl(cell?: GvizCell | null): string | undefined {
+  if (!cell) {
+    return undefined;
+  }
+
+  if (typeof cell.f === "string") {
+    const urlFromFormula = extractUrlFromString(cell.f);
+    if (urlFromFormula) {
+      return urlFromFormula;
+    }
+  }
+
+  if (typeof cell.v === "string") {
+    const urlFromValue = extractUrlFromString(cell.v);
+    if (urlFromValue) {
+      return urlFromValue;
+    }
+  }
+
+  if (cell.v && typeof cell.v === "object") {
+    const serialized = JSON.stringify(cell.v);
+    const match = serialized.match(/https?:\\?\/\\?\/[^"\\]+/i);
+    if (match && match[0]) {
+      return sanitizeUrl(match[0].replace(/\\\//g, "/"));
+    }
+  }
+
+  return undefined;
+}
+
+function extractUrlFromString(raw: string): string | undefined {
+  const formulaMatch = raw.match(/IMAGE\((["']?)([^"',)]+)\1/i);
+  if (formulaMatch && formulaMatch[2]) {
+    return sanitizeUrl(formulaMatch[2]);
+  }
+
+  const directMatch = raw.match(/https?:\/\/[^\s)",]+/i);
+  if (directMatch && directMatch[0]) {
+    return sanitizeUrl(directMatch[0]);
+  }
+
+  return sanitizeUrl(raw);
+}
+
+function sanitizeUrl(url: string): string | undefined {
+  const cleaned = url.trim().replace(/^"|"$/g, "");
+  if (!cleaned) {
+    return undefined;
+  }
+
+  if (!/^https?:\/\//i.test(cleaned)) {
+    return undefined;
+  }
+
+  return cleaned;
+}
+
+function decodeHtml(value: string): string {
+  return value
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, " ");
+}
+
+function stripHtml(value: string): string {
+  return decodeHtml(value.replace(/<[^>]*>/g, " ")).trim();
 }
 

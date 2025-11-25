@@ -61,6 +61,9 @@ export default function TokenCard({
 }: TokenCardProps) {
   const palette = pickPalette(token.color);
   const interactive = Boolean(onSelect);
+  const imageSrc = token.imageUrl
+    ? `/api/token-image?src=${encodeURIComponent(token.imageUrl)}`
+    : null;
 
   const handleKey = (event: KeyboardEvent<HTMLElement>) => {
     if (!interactive) return;
@@ -128,13 +131,13 @@ export default function TokenCard({
           <p className="mt-1 leading-relaxed">{token.npc}</p>
         </div>
 
-        {token.imageUrl && !isFocused && (
+        {imageSrc && !isFocused && (
           <div className="rounded-2xl border border-slate-200 bg-white/80 px-4 py-3">
             <p className="text-[10px] font-semibold uppercase tracking-[0.35em] text-slate-400 mb-2">
               Photo
             </p>
             <img
-              src={token.imageUrl}
+              src={imageSrc}
               alt={`Emplacement pour ${token.name}`}
               className="w-full rounded-xl object-cover"
               loading="lazy"

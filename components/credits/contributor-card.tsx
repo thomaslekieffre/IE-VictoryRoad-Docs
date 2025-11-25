@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import type { Contributor } from "@/lib/credits";
 
 type ContributorCardProps = {
-  contributor: Contributor & { avatarUrl: string }; // avatarUrl est garanti après enrichissement
+  contributor: Required<Contributor>;
 };
 
 export default function ContributorCard({ contributor }: ContributorCardProps) {
