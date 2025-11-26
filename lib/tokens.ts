@@ -43,7 +43,7 @@ type GvizPayload = {
 
 export async function fetchTokens(): Promise<Token[]> {
   try {
-    const [gvizResponse, htmlImageIndex] = await Promise.all([
+    const [gvizResponse, imageLookup] = await Promise.all([
       fetch(GVIZ_URL, {
         next: { revalidate: 10 * 60, tags: ["tokens"] }, // cache 10min, revalidable
       }),
@@ -59,7 +59,6 @@ export async function fetchTokens(): Promise<Token[]> {
     const rows = json.table?.rows ?? [];
 
     const tokens: Token[] = [];
-    let dataRowIndex = 0;
 
     for (let index = 0; index < rows.length; index++) {
       const row = rows[index];
@@ -90,7 +89,12 @@ export async function fetchTokens(): Promise<Token[]> {
       const name = cells[0]?.value || "";
       const location = cells[1]?.value || "";
       const npc = cells[2]?.value || "";
-      const imageUrl = extractImageUrl(rawCells[3]) ?? htmlImageIndex[dataRowIndex];
+      const normalizedName = normalizeLabel(name);
+      const fallbackImage =
+        imageLookup[normalizedName] ??
+        imageLookup[`token ${normalizedName}`] ??
+        imageLookup[`guide token ${normalizedName}`];
+      const imageUrl = extractImageUrl(rawCells[3]) ?? fallbackImage;
 
       // Ignorer l'en-tête
       if (!name || name === "Token" || name === "GUIDE TOKEN") {
@@ -105,8 +109,6 @@ export async function fetchTokens(): Promise<Token[]> {
         npc: npc || "—",
         imageUrl,
       });
-
-      dataRowIndex += 1;
     }
 
     return tokens;
@@ -138,27 +140,27 @@ function buildId(label: string, index: number) {
   return `${slug || "token"}-${index}`;
 }
 
-async function fetchTokenImageIndex(): Promise<(string | undefined)[]> {
+async function fetchTokenImageIndex(): Promise<Record<string, string>> {
   try {
     const response = await fetch(EMBED_HTML_URL, {
       next: { revalidate: 10 * 60, tags: ["tokens"] },
     });
 
     if (!response.ok) {
-      return [];
+      return {};
     }
 
     const html = await response.text();
     return parseImageColumn(html);
   } catch {
-    return [];
+    return {};
   }
 }
 
-function parseImageColumn(html: string): (string | undefined)[] {
+function parseImageColumn(html: string): Record<string, string> {
   const tableMatch = html.match(/<table[^>]+class="waffle"[^>]*>([\s\S]*?)<\/table>/i);
   if (!tableMatch) {
-    return [];
+    return {};
   }
 
   const rows = Array.from(
@@ -166,7 +168,7 @@ function parseImageColumn(html: string): (string | undefined)[] {
     (match) => match[1],
   );
 
-  const images: (string | undefined)[] = [];
+  const images: Record<string, string> = {};
 
   for (const row of rows) {
     const cells = Array.from(
@@ -175,7 +177,13 @@ function parseImageColumn(html: string): (string | undefined)[] {
     );
 
     const labelCell = stripHtml(cells[0] ?? "");
-    if (!labelCell || /token/i.test(labelCell) || isInstructionLabel(labelCell)) {
+    const normalizedLabel = normalizeLabel(labelCell);
+    if (
+      !normalizedLabel ||
+      normalizedLabel === "token" ||
+      normalizedLabel === "guide token" ||
+      isInstructionLabel(labelCell)
+    ) {
       continue; // ignorer les en-têtes et lignes vides
     }
 
@@ -183,13 +191,23 @@ function parseImageColumn(html: string): (string | undefined)[] {
     const imageCell = typeof rawImageCell === "string" ? rawImageCell : "";
     const imgMatch = imageCell.match(/<img[^>]+src="([^"]+)"/i);
     if (imgMatch && imgMatch[1]) {
-      images.push(sanitizeUrl(decodeHtml(imgMatch[1])));
-    } else {
-      images.push(undefined);
+      const sanitized = sanitizeUrl(decodeHtml(imgMatch[1]));
+      if (sanitized) {
+        images[normalizedLabel] = sanitized;
+      }
     }
   }
 
   return images;
+}
+
+function normalizeLabel(value: string): string {
+  return value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
 }
 
 function extractImageUrl(cell?: GvizCell | null): string | undefined {

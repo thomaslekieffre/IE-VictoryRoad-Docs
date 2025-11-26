@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import PlayerDirectory from "@/components/stats-joueurs/player-directory";
 import { fetchPlayerStats, calculateStatThresholds } from "@/lib/stats-joueurs";
 
@@ -27,7 +28,9 @@ export default async function PlayerStatsPage() {
         </p>
       </header>
 
-      <PlayerDirectory players={players} thresholds={thresholds} />
+      <Suspense fallback={<div>Chargement des filtres…</div>}>
+        <PlayerDirectory players={players} thresholds={thresholds} />
+      </Suspense>
     </div>
   );
 }
