@@ -42,73 +42,78 @@ type GvizPayload = {
 };
 
 export async function fetchTokens(): Promise<Token[]> {
-  const [gvizResponse, htmlImageIndex] = await Promise.all([
-    fetch(GVIZ_URL, {
-      next: { revalidate: 10 * 60, tags: ["tokens"] }, // cache 10min, revalidable
-    }),
-    fetchTokenImageIndex(),
-  ]);
+  try {
+    const [gvizResponse, htmlImageIndex] = await Promise.all([
+      fetch(GVIZ_URL, {
+        next: { revalidate: 10 * 60, tags: ["tokens"] }, // cache 10min, revalidable
+      }),
+      fetchTokenImageIndex(),
+    ]);
 
-  if (!gvizResponse.ok) {
-    throw new Error("Impossible de récupérer les données Tokens");
-  }
-
-  const rawText = await gvizResponse.text();
-  const json = extractJson(rawText);
-  const rows = json.table?.rows ?? [];
-
-  const tokens: Token[] = [];
-  let dataRowIndex = 0;
-
-  for (let index = 0; index < rows.length; index++) {
-    const row = rows[index];
-    // Extraire les cellules brutes pour accéder aux formules
-    const rawCells = row.c || [];
-    
-    const cells = rawCells.map((cell) => {
-      // Priorité à la formule si elle existe (pour les formules IMAGE)
-      if (cell?.f) {
-        return { value: String(cell.f).trim(), isFormula: true };
-      }
-      if (cell?.v === undefined || cell.v === null) {
-        return { value: "", isFormula: false };
-      }
-      // Gérer les objets
-      if (typeof cell.v === "object") {
-        return { value: "", isFormula: false };
-      }
-      return { value: String(cell.v).trim(), isFormula: false };
-    });
-
-    if (!cells || !cells.length) {
-      continue;
+    if (!gvizResponse.ok) {
+      throw new Error("Impossible de récupérer les données Tokens");
     }
 
-    // Colonnes: Token (A), Emplacement/Location (B), PNJ/NPC (C), Photos/Pictures (D) avec =IMAGE()
-    // Index 0-based: A=0, B=1, C=2, D=3
-    const name = cells[0]?.value || "";
-    const location = cells[1]?.value || "";
-    const npc = cells[2]?.value || "";
-    const imageUrl = extractImageUrl(rawCells[3]) ?? htmlImageIndex[dataRowIndex];
+    const rawText = await gvizResponse.text();
+    const json = extractJson(rawText);
+    const rows = json.table?.rows ?? [];
 
-    // Ignorer l'en-tête
-    if (!name || name === "Token" || name === "GUIDE TOKEN") {
-      continue;
+    const tokens: Token[] = [];
+    let dataRowIndex = 0;
+
+    for (let index = 0; index < rows.length; index++) {
+      const row = rows[index];
+      // Extraire les cellules brutes pour accéder aux formules
+      const rawCells = row.c || [];
+      
+      const cells = rawCells.map((cell) => {
+        // Priorité à la formule si elle existe (pour les formules IMAGE)
+        if (cell?.f) {
+          return { value: String(cell.f).trim(), isFormula: true };
+        }
+        if (cell?.v === undefined || cell.v === null) {
+          return { value: "", isFormula: false };
+        }
+        // Gérer les objets
+        if (typeof cell.v === "object") {
+          return { value: "", isFormula: false };
+        }
+        return { value: String(cell.v).trim(), isFormula: false };
+      });
+
+      if (!cells || !cells.length) {
+        continue;
+      }
+
+      // Colonnes: Token (A), Emplacement/Location (B), PNJ/NPC (C), Photos/Pictures (D) avec =IMAGE()
+      // Index 0-based: A=0, B=1, C=2, D=3
+      const name = cells[0]?.value || "";
+      const location = cells[1]?.value || "";
+      const npc = cells[2]?.value || "";
+      const imageUrl = extractImageUrl(rawCells[3]) ?? htmlImageIndex[dataRowIndex];
+
+      // Ignorer l'en-tête
+      if (!name || name === "Token" || name === "GUIDE TOKEN") {
+        continue;
+      }
+
+      tokens.push({
+        id: buildId(name, index),
+        name,
+        color: getTokenColor(name),
+        location: location || "—",
+        npc: npc || "—",
+        imageUrl,
+      });
+
+      dataRowIndex += 1;
     }
 
-    tokens.push({
-      id: buildId(name, index),
-      name,
-      color: getTokenColor(name),
-      location: location || "—",
-      npc: npc || "—",
-      imageUrl,
-    });
-
-    dataRowIndex += 1;
+    return tokens;
+  } catch (error) {
+    console.error("Erreur lors de la récupération des tokens:", error);
+    return [];
   }
-
-  return tokens;
 }
 
 function extractJson(raw: string): GvizPayload {
@@ -170,11 +175,12 @@ function parseImageColumn(html: string): (string | undefined)[] {
     );
 
     const labelCell = stripHtml(cells[0] ?? "");
-    if (!labelCell || /token/i.test(labelCell)) {
+    if (!labelCell || /token/i.test(labelCell) || isInstructionLabel(labelCell)) {
       continue; // ignorer les en-têtes et lignes vides
     }
 
-    const imageCell = cells[3] ?? "";
+    const rawImageCell = cells[3];
+    const imageCell = typeof rawImageCell === "string" ? rawImageCell : "";
     const imgMatch = imageCell.match(/<img[^>]+src="([^"]+)"/i);
     if (imgMatch && imgMatch[1]) {
       images.push(sanitizeUrl(decodeHtml(imgMatch[1])));
@@ -255,5 +261,14 @@ function decodeHtml(value: string): string {
 
 function stripHtml(value: string): string {
   return decodeHtml(value.replace(/<[^>]*>/g, " ")).trim();
+}
+
+function isInstructionLabel(label: string): boolean {
+  const normalized = label.toLowerCase();
+  return (
+    normalized.includes("photos/pictures") ||
+    normalized.includes("little blue cursor") ||
+    normalized.includes("petit curseur")
+  );
 }
 

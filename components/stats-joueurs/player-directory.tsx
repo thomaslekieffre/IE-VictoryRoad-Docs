@@ -165,7 +165,7 @@ export default function PlayerDirectory({ players, thresholds }: PlayerDirectory
         )}
         aria-hidden={Boolean(selectedPlayer)}
       >
-        <div className="flex justify-center rounded-3xl border border-border/60 bg-card/80 p-4 shadow-xl shadow-slate-200/50">
+        <div className="flex justify-center rounded-3xl border border-border/60 bg-card/80 p-4 shadow-xl shadow-slate-200/50 dark:shadow-[0_30px_80px_rgba(0,0,0,0.55)]">
           <Stat label="Joueurs listés" value={players.length.toString()} />
         </div>
 
