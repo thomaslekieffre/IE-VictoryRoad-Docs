@@ -39,86 +39,134 @@ export default function Home() {
         </div>
 
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <Link
-            href="/astuce/feves"
-            className="group relative flex flex-col gap-4 rounded-3xl border border-border bg-card/80 p-6 shadow-lg transition hover:-translate-y-1 hover:shadow-xl sm:p-8"
-          >
-            <div className="flex items-center gap-3">
+          <div className="group relative flex flex-col gap-4 rounded-3xl border border-border bg-card/80 p-6 shadow-lg transition hover:-translate-y-1 hover:shadow-xl sm:p-8">
+            <Link href="/astuce/feves" className="flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-500/10 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400">
                 <Sparkles className="h-6 w-6" />
               </div>
               <h3 className="text-lg font-bold text-foreground">Astuces</h3>
-            </div>
+            </Link>
             <p className="text-sm text-muted-foreground">
               Optimise les fèves, tokens et rerolls héros avec nos scénarios testés.
             </p>
-            <div className="mt-auto flex items-center gap-2 text-sm font-semibold text-foreground">
+            <Link
+              href="/astuce/feves"
+              className="mt-auto flex items-center gap-2 text-sm font-semibold text-foreground"
+            >
               <span>Explorer</span>
               <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-            </div>
+            </Link>
             <div className="mt-2 flex flex-wrap gap-2">
-              <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
+              <Link
+                href="/astuce/feves"
+                className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground hover:bg-muted/80 hover:text-foreground transition-colors"
+              >
                 Fèves
-              </span>
-              <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
+              </Link>
+              <Link
+                href="/astuce/farm-token"
+                className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground hover:bg-muted/80 hover:text-foreground transition-colors"
+              >
                 Tokens
-              </span>
-              <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
+              </Link>
+              <Link
+                href="/heros-s1"
+                className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground hover:bg-muted/80 hover:text-foreground transition-colors"
+              >
                 Héros S1
-              </span>
+              </Link>
             </div>
-          </Link>
+          </div>
 
-          <Link
-            href="/doc-technique/tirs"
-            className="group relative flex flex-col gap-4 rounded-3xl border border-border bg-card/80 p-6 shadow-lg transition hover:-translate-y-1 hover:shadow-xl sm:p-8"
-          >
-            <div className="flex items-center gap-3">
+          <div className="group relative flex flex-col gap-4 rounded-3xl border border-border bg-card/80 p-6 shadow-lg transition hover:-translate-y-1 hover:shadow-xl sm:p-8">
+            <Link href="/doc-technique/tirs" className="flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-500/10 text-blue-600 dark:bg-blue-500/20 dark:text-blue-400">
                 <BookOpenCheck className="h-6 w-6" />
               </div>
               <h3 className="text-lg font-bold text-foreground">Docs techniques</h3>
-            </div>
+            </Link>
             <p className="text-sm text-muted-foreground">
               Fiches tir/défense/gardien avec frames clés, coûts et mappings élémentaires.
             </p>
-            <div className="mt-auto flex items-center gap-2 text-sm font-semibold text-foreground">
+            <Link
+              href="/doc-technique/tirs"
+              className="mt-auto flex items-center gap-2 text-sm font-semibold text-foreground"
+            >
               <span>Explorer</span>
               <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-            </div>
+            </Link>
             <div className="mt-2 flex flex-wrap gap-2">
-              <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
+              <Link
+                href="/doc-technique/tirs"
+                className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground hover:bg-muted/80 hover:text-foreground transition-colors"
+              >
                 Tirs
-              </span>
-              <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
+              </Link>
+              <Link
+                href="/doc-technique/offensive"
+                className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground hover:bg-muted/80 hover:text-foreground transition-colors"
+              >
                 Attaque
-              </span>
-              <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
+              </Link>
+              <Link
+                href="/doc-technique/defensive"
+                className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground hover:bg-muted/80 hover:text-foreground transition-colors"
+              >
                 Défense
-              </span>
-              <span className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground">
+              </Link>
+              <Link
+                href="/doc-technique/gardien"
+                className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground hover:bg-muted/80 hover:text-foreground transition-colors"
+              >
                 Gardien
-              </span>
+              </Link>
             </div>
-          </Link>
+          </div>
 
-          <Link
-            href="/"
-            className="group relative flex flex-col gap-4 rounded-3xl border border-border bg-card/80 p-6 shadow-lg transition hover:-translate-y-1 hover:shadow-xl sm:p-8"
-          >
-            <div className="flex items-center gap-3">
+          <div className="group relative flex flex-col gap-4 rounded-3xl border border-border bg-card/80 p-6 shadow-lg transition hover:-translate-y-1 hover:shadow-xl sm:p-8">
+            <Link href="/stats-joueurs" className="flex items-center gap-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-500/10 text-purple-600 dark:bg-purple-500/20 dark:text-purple-400">
                 <Swords className="h-6 w-6" />
               </div>
-              <h3 className="text-lg font-bold text-foreground">Passifs</h3>
-            </div>
+              <h3 className="text-lg font-bold text-foreground">Joueurs</h3>
+            </Link>
             <p className="text-sm text-muted-foreground">
-              Chaque buff listé avec conditions, synergies élémentaires et priorités de farm.
+              Statistiques détaillées, recrutement des héros et guides d'évolution.
             </p>
-            <div className="mt-auto flex items-center gap-2 text-sm font-semibold text-muted-foreground">
-              <span>Bientôt disponible</span>
+            <Link
+              href="/stats-joueurs"
+              className="mt-auto flex items-center gap-2 text-sm font-semibold text-foreground"
+            >
+              <span>Explorer</span>
+              <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+            </Link>
+            <div className="mt-2 flex flex-wrap gap-2">
+              <Link
+                href="/stats-joueurs"
+                className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground hover:bg-muted/80 hover:text-foreground transition-colors"
+              >
+                Stats
+              </Link>
+              <Link
+                href="/heros-s1"
+                className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground hover:bg-muted/80 hover:text-foreground transition-colors"
+              >
+                Héros S1
+              </Link>
+              <span className="rounded-full bg-muted/50 px-3 py-1 text-xs font-medium text-muted-foreground/50 cursor-not-allowed">
+                Esprit guerrier
+              </span>
+              <span className="rounded-full bg-muted/50 px-3 py-1 text-xs font-medium text-muted-foreground/50 cursor-not-allowed">
+                Miximax
+              </span>
+              <span className="rounded-full bg-muted/50 px-3 py-1 text-xs font-medium text-muted-foreground/50 cursor-not-allowed">
+                Eveil
+              </span>
+              <span className="rounded-full bg-muted/50 px-3 py-1 text-xs font-medium text-muted-foreground/50 cursor-not-allowed">
+                Totem
+              </span>
             </div>
-          </Link>
+          </div>
         </div>
       </section>
     </div>

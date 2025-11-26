@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 import type { Contributor } from "@/lib/credits";
+import { Crown } from "lucide-react";
 
 type ContributorCardProps = {
   contributor: Required<Contributor>;
@@ -31,7 +32,12 @@ export default function ContributorCard({ contributor }: ContributorCardProps) {
         />
       </div>
       <div className="flex flex-col items-center gap-1 text-center">
-        <h3 className="font-bold text-foreground">{contributor.name}</h3>
+        <h3 className="flex items-center gap-1.5 font-bold text-foreground">
+          {contributor.name}
+          {contributor.isVip && (
+            <Crown className="h-4 w-4 fill-yellow-500 text-yellow-600 dark:text-yellow-400" />
+          )}
+        </h3>
         <span
           className={cn(
             "rounded-full border px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide",
