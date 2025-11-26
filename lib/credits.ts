@@ -120,6 +120,7 @@ export async function enrichContributors(
         ...entry,
         name: computedName,
         avatarUrl,
+        isVip: Boolean(entry.isVip),
       };
     }),
   );

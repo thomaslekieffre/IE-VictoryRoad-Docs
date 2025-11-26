@@ -76,41 +76,48 @@ export async function fetchPlayerStats(): Promise<PlayerStat[]> {
     const jsonPayload = extractJson(rawText);
     const rows = jsonPayload.table?.rows ?? [];
 
-    return rows
-      .map((row, index) => {
-        const cells = row.c?.map((cell) => (cell?.v === undefined || cell?.v === null ? "" : String(cell.v).trim())) ?? [];
+    return rows.reduce<PlayerStat[]>((acc, row, index) => {
+      const cells =
+        row.c?.map((cell) =>
+          cell?.v === undefined || cell?.v === null ? "" : String(cell.v).trim(),
+        ) ?? [];
 
-        // Mapping des colonnes basé sur ton fichier Excel
-        // 0: Image, 1: ImageURL, 2: Name, 3: Position, 4: Element, 5: Kick, 6: Control, 
-        // 7: Technique, 8: Pressure(Guard), 9: Physical(Body), 10: Agility(Speed), 11: Intelligence(Stamina), ... 17: GKStats(Catch)
-        
-        // Sécurité si la ligne est vide
-        if (cells.length < 3) return null;
+      // Mapping des colonnes basé sur ton fichier Excel
+      // 0: Image, 1: ImageURL, 2: Name, 3: Position, 4: Element, 5: Kick, 6: Control,
+      // 7: Technique, 8: Pressure(Guard), 9: Physical(Body), 10: Agility(Speed), 11: Intelligence(Stamina), ... 17: GKStats(Catch)
 
-        const name = cells[2];
-        if (!name || name === "Name" || name === "Nom") return null; // Skip header
+      // Sécurité si la ligne est vide
+      if (cells.length < 3) {
+        return acc;
+      }
 
-        const imageRaw = cells[0] || cells[1];
-        
-        return {
-          id: String(index + 1),
-          name: name,
-          image: extractImageUrl(imageRaw),
-          position: cells[3] || "Unknown",
-          element: cells[4] || "Unknown",
-          rank: "B", // Pas de colonne Rank identifiée clairement, défaut B
-          stats: {
-            kick: Number(cells[5]) || 0,
-            control: Number(cells[6]) || 0,
-            guard: Number(cells[8]) || 0, // Pressure
-            body: Number(cells[9]) || 0, // Physical
-            speed: Number(cells[10]) || 0, // Agility
-            stamina: Number(cells[11]) || 0, // Intelligence
-            catch: Number(cells[17]) || 0, // GKStats
-          },
-        };
-      })
-      .filter((p): p is PlayerStat => p !== null);
+      const name = cells[2];
+      if (!name || name === "Name" || name === "Nom") {
+        return acc; // Skip header
+      }
+
+      const imageRaw = cells[0] || cells[1];
+
+      acc.push({
+        id: String(index + 1),
+        name,
+        image: extractImageUrl(imageRaw),
+        position: cells[3] || "Unknown",
+        element: cells[4] || "Unknown",
+        rank: "B", // Pas de colonne Rank identifiée clairement, défaut B
+        stats: {
+          kick: Number(cells[5]) || 0,
+          control: Number(cells[6]) || 0,
+          guard: Number(cells[8]) || 0, // Pressure
+          body: Number(cells[9]) || 0, // Physical
+          speed: Number(cells[10]) || 0, // Agility
+          stamina: Number(cells[11]) || 0, // Intelligence
+          catch: Number(cells[17]) || 0, // GKStats
+        },
+      });
+
+      return acc;
+    }, []);
       
   } catch (error) {
     console.error("Erreur lors de la récupération des stats joueurs:", error);
