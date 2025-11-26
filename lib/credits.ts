@@ -3,6 +3,7 @@ export type Contributor = {
   role: "creator" | "co-creator" | "contributor";
   discordId: string;
   avatarUrl?: string;
+  isVip?: boolean;
 };
 
 // Créateurs du site
@@ -34,11 +35,11 @@ export const contributors: Contributor[] = [
   { name: "", role: "contributor", discordId: "1234809303219834914" },
   { name: "", role: "contributor", discordId: "320477336338169856" },
   { name: "", role: "contributor", discordId: "626086169461129227" },
-  { name: "", role: "contributor", discordId: "807700447884214364" },
+  { name: "", role: "contributor", discordId: "807700447884214364", isVip: true },
   { name: "", role: "contributor", discordId: "304024933288378370" },
-  { name: "", role: "contributor", discordId: "251737227548164096" },
-  { name: "", role: "contributor", discordId: "526101484895731723" },
-  { name: "", role: "contributor", discordId: "246262989412368385" },
+  { name: "", role: "contributor", discordId: "251737227548164096", isVip: true },
+  { name: "", role: "contributor", discordId: "526101484895731723", isVip: true },
+  { name: "", role: "contributor", discordId: "246262989412368385", isVip: true },
   { name: "", role: "contributor", discordId: "331710190095302657" },
   { name: "..", role: "contributor", discordId: "974720250899742850" },
   { name: "", role: "contributor", discordId: "711324528768319558" },
