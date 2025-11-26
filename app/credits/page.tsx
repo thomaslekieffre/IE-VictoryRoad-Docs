@@ -15,6 +15,13 @@ export default async function CreditsPage() {
   const enrichedCreators = await enrichContributors(creators);
   const enrichedContributors = await enrichContributors(contributors);
 
+  // Trier les contributeurs : VIP d'abord
+  enrichedContributors.sort((a, b) => {
+    if (a.isVip && !b.isVip) return -1;
+    if (!a.isVip && b.isVip) return 1;
+    return 0;
+  });
+
   return (
     <div className="space-y-12 sm:space-y-16">
       <header className="space-y-3 sm:space-y-4">

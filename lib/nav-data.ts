@@ -23,7 +23,7 @@ export const navItems: NavItem[] = [
       {
         label: "Stats Joueurs",
         description: "Statistiques détaillées des joueurs",
-        href: "#",
+        href: "/stats-joueurs",
       },
       {
         label: "Héros S1",
@@ -32,17 +32,17 @@ export const navItems: NavItem[] = [
       },
       {
         label: "Esprit guerrier",
-        description: "Les puissants esprits guerriers",
+        description: "Les puissants esprits guerriers (soon)",
         href: "#",
       },
       {
         label: "Miximax",
-        description: "Les meilleurs miximax",
+        description: "Les meilleurs miximax (soon)",
         href: "#",
       },
       {
         label: "Eveil",
-        description: "Les éveils des joueurs",
+        description: "Les éveils des joueurs (soon)",
         href: "#",
       },
       {

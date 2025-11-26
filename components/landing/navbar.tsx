@@ -8,14 +8,24 @@ import Link from "next/link";
 import { navItems } from "@/lib/nav-data";
 import type { NavItem } from "@/lib/nav-data";
 import { cn } from "@/lib/utils";
-import { useTheme } from "@/components/theme-provider";
+import { useTheme } from "next-themes";
 
 type NavbarProps = ComponentPropsWithoutRef<"header">;
 
 const Navbar = ({ className, ...props }: NavbarProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const { theme, toggleTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+
+  // Avoid hydration mismatch
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const toggleTheme = () => {
+    setTheme(theme === "dark" ? "light" : "dark");
+  };
 
   useEffect(() => {
     if (!isMenuOpen) {
@@ -68,9 +78,9 @@ const Navbar = ({ className, ...props }: NavbarProps) => {
             type="button"
             onClick={toggleTheme}
             className="hidden rounded-full border border-border bg-background/50 p-2 text-foreground transition hover:bg-accent md:flex"
-            aria-label={theme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
+            aria-label={mounted && theme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
           >
-            {theme === "dark" ? (
+            {mounted && theme === "dark" ? (
               <Sun className="h-4 w-4" />
             ) : (
               <Moon className="h-4 w-4" />
@@ -108,9 +118,9 @@ const Navbar = ({ className, ...props }: NavbarProps) => {
                   type="button"
                   onClick={toggleTheme}
                   className="rounded-full border border-border bg-background/50 p-2 text-foreground transition hover:bg-accent"
-                  aria-label={theme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
+                  aria-label={mounted && theme === "dark" ? "Passer en mode clair" : "Passer en mode sombre"}
                 >
-                  {theme === "dark" ? (
+                  {mounted && theme === "dark" ? (
                     <Sun className="h-4 w-4" />
                   ) : (
                     <Moon className="h-4 w-4" />

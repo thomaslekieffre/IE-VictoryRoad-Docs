@@ -76,11 +76,11 @@ export default function FeveDirectory({ feves }: Props) {
         )}
         aria-hidden={Boolean(selectedFeve)}
       >
-        <div className="flex justify-center rounded-3xl border border-border/60 bg-card/80 p-4 shadow-xl shadow-slate-200/50">
+        <div className="flex justify-center rounded-3xl border border-border/60 bg-card/80 p-4 shadow-xl shadow-slate-200/50 dark:shadow-[0_30px_80px_rgba(0,0,0,0.55)]">
           <Stat label="Fèves listées" value={feves.length.toString()} />
         </div>
 
-        <div className="grid gap-4 rounded-3xl border border-border bg-card/90 p-4 shadow-lg shadow-slate-200/50 sm:grid-cols-2 sm:p-5 lg:grid-cols-[2fr_1fr]">
+        <div className="grid gap-4 rounded-3xl border border-border bg-card/90 p-4 shadow-lg shadow-slate-200/50 dark:shadow-[0_30px_80px_rgba(0,0,0,0.55)] sm:grid-cols-2 sm:p-5 lg:grid-cols-[2fr_1fr]">
           <label className="col-span-full flex flex-col gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground sm:col-span-2">
             Recherche
             <input

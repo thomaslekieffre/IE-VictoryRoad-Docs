@@ -32,7 +32,7 @@ export default function RootLayout({
       >
         <ThemeProvider>
           <div className="min-h-screen bg-gradient-to-b from-background via-background to-muted/30">
-            <div className="mx-auto flex min-h-screen max-w-6xl flex-col px-4 pb-12 pt-6 sm:px-6 sm:pb-16 sm:pt-8 md:px-10">
+            <div className="mx-auto flex min-h-screen max-w-[1400px] flex-col px-4 pb-12 pt-6 sm:px-6 sm:pb-16 sm:pt-8 md:px-10">
               <Navbar />
               <main className="mt-6 flex flex-1 flex-col sm:mt-10">{children}</main>
               <Footer className="mt-10" />
