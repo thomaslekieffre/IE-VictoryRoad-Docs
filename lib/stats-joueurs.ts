@@ -19,6 +19,7 @@ export type PlayerStat = {
     speed?: number;
     stamina?: number;
     catch?: number;
+    total?: number;
   };
 };
 
@@ -98,6 +99,18 @@ export async function fetchPlayerStats(): Promise<PlayerStat[]> {
 
       const imageRaw = cells[0] || cells[1];
 
+      const stats = {
+        kick: Number(cells[5]) || 0,
+        control: Number(cells[6]) || 0,
+        guard: Number(cells[8]) || 0, // Pressure
+        body: Number(cells[9]) || 0, // Physical
+        speed: Number(cells[10]) || 0, // Agility
+        stamina: Number(cells[11]) || 0, // Intelligence
+        catch: Number(cells[7]) || 0, // GKStats
+      };
+
+      const total = Object.values(stats).reduce((a, b) => a + b, 0);
+
       acc.push({
         id: String(index + 1),
         name,
@@ -106,13 +119,8 @@ export async function fetchPlayerStats(): Promise<PlayerStat[]> {
         element: cells[4] || "Unknown",
         rank: "B", // Pas de colonne Rank identifiée clairement, défaut B
         stats: {
-          kick: Number(cells[5]) || 0,
-          control: Number(cells[6]) || 0,
-          guard: Number(cells[8]) || 0, // Pressure
-          body: Number(cells[9]) || 0, // Physical
-          speed: Number(cells[10]) || 0, // Agility
-          stamina: Number(cells[11]) || 0, // Intelligence
-          catch: Number(cells[17]) || 0, // GKStats
+          ...stats,
+          total,
         },
       });
 
@@ -129,7 +137,7 @@ export async function fetchPlayerStats(): Promise<PlayerStat[]> {
 export type StatThresholds = Record<string, number[]>;
 
 export function calculateStatThresholds(players: PlayerStat[]): StatThresholds {
-  const statsToTrack = ["kick", "body", "control", "guard", "speed", "stamina", "catch"];
+  const statsToTrack = ["kick", "body", "control", "guard", "speed", "stamina", "catch", "total"];
   const values: Record<string, number[]> = {};
 
   // Initialize arrays
