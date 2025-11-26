@@ -15,7 +15,7 @@ export default function Home() {
           </>
         }
         subtitle="Stats, passifs, routes de farm, compositions méta et fiches techniques détaillées. Passe de capitaine casual à stratège pro en quelques clics."
-        imageSrc="https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/2799860/0b621f72bfb77600f74d4ce59474a215856b8a46/capsule_616x353.jpg?t=1763354428"
+        imageSrc="https://media.discordapp.net/attachments/1440734138012536882/1443228200829456404/Inazuma-Eleven-Victory-Road-of-Heroes_2022_07-21-22_013.jpg?ex=69284e80&is=6926fd00&hm=0a65074f5da5063a6ae62236eee9be5cd9367133490d1e462f22e0d8e5017601&=&format=webp&width=1589&height=800"
         primaryCta={{
           href: "/doc-technique/tirs",
           label: "Explorer les docs",
